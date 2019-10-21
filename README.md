@@ -83,11 +83,13 @@ $ sudo apt-get install git vim (depending on your choice)
 
 **Download association15118 from github and compile hostapd**
 ~~~
-$ git clone https://github.com/appseclab/association15118
+$ git clone https://github.com/appseclab/wifi15118
 ~~~
 * (case 1) Use the modified version of hostapd v2.8
 ~~~
-$ cd association15118/SECC/hostapd-2.8-modified/hostapd/
+$ cd secc/hostapd-2.8-modified/hostapd/
+
+$ cp defconfig ./config
 
 $ sudo make clean
 
@@ -97,11 +99,13 @@ $ sudo make install
 ~~~
 * (case 2) Patch the hostapd v2.8 source with hostapd.patch file
 ~~~
-$ (get hostapd-2.8, and cd to the parent directory of hostapd-2.8 folder)
+$ (download hostapd-2.8, at the parent directory of hostapd-2.8)
 
 $ patch -p0 < hostapd.patch
 
-$ cd hostapd-2.8/src
+$ cd hostapd-2.8/hostapd
+
+$ cp defconfig ./config
 
 $ sudo make clean
 
