@@ -4513,6 +4513,11 @@ int ieee802_11_mgmt(struct hostapd_data *hapd, const u8 *buf, size_t len,
 
 	if (hapd->iconf->track_sta_max_num)
 		sta_track_add(hapd->iface, mgmt->sa, ssi_signal);
+	
+	u8* hostapd_conf_vse;
+	u8 response_organzationID[5] = {0, };
+	u8 response_ett;
+	u8 request_ett;
 
 	switch (stype) {
 	case WLAN_FC_STYPE_AUTH:
@@ -4521,11 +4526,12 @@ int ieee802_11_mgmt(struct hostapd_data *hapd, const u8 *buf, size_t len,
 		ret = 1;
 		break;
 	case WLAN_FC_STYPE_ASSOC_REQ:
+		;
 		/* ASLAB_MJU { */
 		/* Get hostap Vendor Specific Element */
-		u8* hostapd_conf_vse = (u8 *)hapd->conf->assocresp_elements;
-		u8 response_organzationID[5] = {0, };
-		u8 response_ett = 0;
+		hostapd_conf_vse = (u8 *)hapd->conf->assocresp_elements;
+		//response_organzationID[5] = {0, };
+		response_ett = 0;
 		for(int i = 0 ; i < wpabuf_len(hapd->conf->assocresp_elements) ; i++){
 			if(hostapd_conf_vse[i] == 0xdd){ // Tag number: Vendor Specific
 				response_organzationID[0] = hostapd_conf_vse[2];
@@ -4538,7 +4544,7 @@ int ieee802_11_mgmt(struct hostapd_data *hapd, const u8 *buf, size_t len,
 		}
 
 		/* Get client Vendor Specific Element */
-		u8 request_ett = 0;
+		request_ett = 0;
 		for(int i = 0 ; i < len ; i++){
 			if(buf[i] == 0xdd){ // Tag number: Vendor Specific
 				if((buf[i+2] == response_organzationID[0]) && (buf[i+3] == response_organzationID[1]) && (buf[i+4] == response_organzationID[2])
@@ -4564,11 +4570,12 @@ int ieee802_11_mgmt(struct hostapd_data *hapd, const u8 *buf, size_t len,
 		ret = 1;
 		break;
 	case WLAN_FC_STYPE_REASSOC_REQ:
+		;
 		/* ASLAB_MJU { */
 		/* Get hostap Vendor Specific Element */
-		u8* hostapd_conf_vse = (u8 *)hapd->conf->assocresp_elements;
-		u8 response_organzationID[5] = {0, };
-		u8 response_ett = 0;
+		hostapd_conf_vse = (u8 *)hapd->conf->assocresp_elements;
+		//response_organzationID[5] = {0, };
+		response_ett = 0;
 		for(int i = 0 ; i < wpabuf_len(hapd->conf->assocresp_elements) ; i++){
 			if(hostapd_conf_vse[i] == 0xdd){ // Tag number: Vendor Specific
 				response_organzationID[0] = hostapd_conf_vse[2];
@@ -4581,7 +4588,7 @@ int ieee802_11_mgmt(struct hostapd_data *hapd, const u8 *buf, size_t len,
 		}
 
 		/* Get client Vendor Specific Element */
-		u8 request_ett = 0;
+		request_ett = 0;
 		for(int i = 0 ; i < len ; i++){
 			if(buf[i] == 0xdd){ // Tag number: Vendor Specific
 				if((buf[i+2] == response_organzationID[0]) && (buf[i+3] == response_organzationID[1]) && (buf[i+4] == response_organzationID[2])
