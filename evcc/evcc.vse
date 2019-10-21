@@ -1,0 +1,28 @@
+ETT_AC=yes
+ETT_DC=no
+ETT_WPT=yes
+ETT_ACD=no
+
+# Additional Information
+AC:C=type1
+AC:M=single
+AC:S=charge,BPT
+WPT:Z=z2
+WPT:P=wpt1,wpt2
+WPT:F=LF_ev
+WPT:A=LPE
+WPT:P=LF
+
+
+# AC:C=type1 or type2 or type3
+# AC:M=single or three
+# AC:S=charge or BPT or island
+# DC:S=type1 or type2
+# DC:M=core or extended or combo_core or unique
+# DC:S=charge or charge_hp, BPT, island
+# WPT:Z=z1 or z2 or z3
+# WPT:P=wpt1 or wpt2 or wpt3 or wpt4
+# WPT:F=manual or LF_ev or LF_se or MV_ev or MV_se or LPE
+# WPT:A=LPE or P2P
+# WPT:P=LPE or P2P or MV or LF
+# WPT:G=circular or doubleD or polar

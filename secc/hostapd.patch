@@ -1,0 +1,111 @@
+diff -EBbwNaur hostapd-2.8/src/ap/ieee802_11.c hostapd-2.8-modified/src/ap/ieee802_11.c
+--- hostapd-2.8/src/ap/ieee802_11.c	2019-10-20 21:13:12.000000000 +0900
++++ hostapd-2.8-modified/src/ap/ieee802_11.c	2019-10-20 23:49:06.000000000 +0900
+@@ -3576,6 +3575,19 @@
+ 	}
+ #endif /* CONFIG_FILS */
+ 
++/* ASLAB_MJU { */
++	/* show source, dest mac address etc.. */
++	u16 f_control = le_to_host16(reply->frame_control);
++	u16 dur = le_to_host16(reply->duration);
++	u16 s_ctrl = le_to_host16(reply->seq_ctrl);
++	wpa_printf(MSG_INFO, "frame control: 0x%04x", f_control);
++	wpa_printf(MSG_INFO, "duration: 0x%04x", dur);
++	wpa_printf(MSG_INFO, "Source(client) MAC Address: " MACSTR, MAC2STR(reply->sa));
++	wpa_printf(MSG_INFO, "Destination(hostap) MAC Address: " MACSTR, MAC2STR(reply->da));
++	wpa_printf(MSG_INFO, "bssid: " MACSTR, MAC2STR(reply->bssid));
++	wpa_printf(MSG_INFO, "seq_ctrl: 0x%04x", s_ctrl);
++/* } ASLAB_MJU */
++
+ 	if (hostapd_drv_send_mlme(hapd, reply, send_len, 0) < 0) {
+ 		wpa_printf(MSG_INFO, "Failed to send assoc resp: %s",
+ 			   strerror(errno));
+@@ -4509,11 +4521,87 @@
+ 		ret = 1;
+ 		break;
+ 	case WLAN_FC_STYPE_ASSOC_REQ:
++		/* ASLAB_MJU { */
++		/* Get hostap Vendor Specific Element */
++		u8* hostapd_conf_vse = (u8 *)hapd->conf->assocresp_elements;
++		u8 response_organzationID[5] = {0, };
++		u8 response_ett = 0;
++		for(int i = 0 ; i < wpabuf_len(hapd->conf->assocresp_elements) ; i++){
++			if(hostapd_conf_vse[i] == 0xdd){ // Tag number: Vendor Specific
++				response_organzationID[0] = hostapd_conf_vse[2];
++				response_organzationID[1] = hostapd_conf_vse[3];
++				response_organzationID[2] = hostapd_conf_vse[4];
++				response_organzationID[3] = hostapd_conf_vse[5];
++				response_organzationID[4] = hostapd_conf_vse[6];
++				response_ett = hostapd_conf_vse[8];
++			}
++		}
++
++		/* Get client Vendor Specific Element */
++		u8 request_ett = 0;
++		for(int i = 0 ; i < len ; i++){
++			if(buf[i] == 0xdd){ // Tag number: Vendor Specific
++				if((buf[i+2] == response_organzationID[0]) && (buf[i+3] == response_organzationID[1]) && (buf[i+4] == response_organzationID[2])
++				&& (buf[i+5] == response_organzationID[3]) && (buf[i+6] == response_organzationID[4])){
++
++					request_ett = buf[i+8];
++
++					/* check if hostap and client are compatible in ETT*/
++					if((response_ett & request_ett) == 0x00){
++						wpa_printf(MSG_INFO, "ETT of EV's VSE has no common service with AP's ETT");
++						return ret;
++						break;
++					}
++
++				} else {
++					i += buf[i+1];
++				}
++			}
++		}
++		/* } ASLAB_MJU */
+ 		wpa_printf(MSG_DEBUG, "mgmt::assoc_req");
+ 		handle_assoc(hapd, mgmt, len, 0, ssi_signal);
+ 		ret = 1;
+ 		break;
+ 	case WLAN_FC_STYPE_REASSOC_REQ:
++		/* ASLAB_MJU { */
++		/* Get hostap Vendor Specific Element */
++		u8* hostapd_conf_vse = (u8 *)hapd->conf->assocresp_elements;
++		u8 response_organzationID[5] = {0, };
++		u8 response_ett = 0;
++		for(int i = 0 ; i < wpabuf_len(hapd->conf->assocresp_elements) ; i++){
++			if(hostapd_conf_vse[i] == 0xdd){ // Tag number: Vendor Specific
++				response_organzationID[0] = hostapd_conf_vse[2];
++				response_organzationID[1] = hostapd_conf_vse[3];
++				response_organzationID[2] = hostapd_conf_vse[4];
++				response_organzationID[3] = hostapd_conf_vse[5];
++				response_organzationID[4] = hostapd_conf_vse[6];
++				response_ett = hostapd_conf_vse[8];
++			}
++		}
++
++		/* Get client Vendor Specific Element */
++		u8 request_ett = 0;
++		for(int i = 0 ; i < len ; i++){
++			if(buf[i] == 0xdd){ // Tag number: Vendor Specific
++				if((buf[i+2] == response_organzationID[0]) && (buf[i+3] == response_organzationID[1]) && (buf[i+4] == response_organzationID[2])
++				&& (buf[i+5] == response_organzationID[3]) && (buf[i+6] == response_organzationID[4])){
++
++					request_ett = buf[i+8];
++
++					/* check if hostap and client are compatible in ETT*/
++					if((response_ett & request_ett) == 0x00){
++						wpa_printf(MSG_INFO, "ETT of EV's VSE has no common service with AP's ETT");
++						return ret;
++						break;
++					}
++
++				} else {
++					i += buf[i+1];
++				}
++			}
++		}
++		/* } ASLAB_MJU */
+ 		wpa_printf(MSG_DEBUG, "mgmt::reassoc_req");
+ 		handle_assoc(hapd, mgmt, len, 1, ssi_signal);
+ 		ret = 1;

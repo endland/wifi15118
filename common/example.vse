@@ -1,0 +1,34 @@
+# Charging services
+ETT_AC=yes
+ETT_DC=no
+ETT_WPT=yes
+ETT_ACD=no
+
+# Additional Information
+AC:C=type1
+AC:M=single
+AC:S=charge,BPT
+WPT:Z=z2
+WPT:P=wpt1,wpt2
+WPT:F=LF_ev
+WPT:A=LPE
+WPT:P=LF
+
+
+# ETT_AC=yes | no
+# ETT_DC=yes | no
+# ETT_WPT=yes | no
+# ETT_ACD=yes | no
+
+# AC:C=type1 | type2 | type3
+# AC:M=single | three
+# AC:S=charge | BPT | island
+# DC:S=type1 | type2
+# DC:M=core | extended | combo_core | unique
+# DC:S=charge | charge_hp | BPT | island
+# WPT:Z=z1 | z2 | z3
+# WPT:P=wpt1 | wpt2 | wpt3 | wpt4
+# WPT:F=manual | LF_ev | LF_se | MV_ev | MV_se | LPE
+# WPT:A=LPE | P2P
+# WPT:P=LPE | P2P | MV | LF
+# WPT:G=circular | doubleD | polar
