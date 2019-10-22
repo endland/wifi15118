@@ -229,3 +229,20 @@ $ sudo bash evcc.sh <interface name>
 	hostapd-2.8-vse15118/: modified version of hostpad that accepts EVCCs only with compatible VSE values
 	
 	risev2g-secc/ : RiseV2G SECC implementation
+
+## Credit
+
+* Minho Shin (shinminho@gmail.com, Dept. of Computer Engineering, Myongji University)
+    * Project director, Supporting developer
+* Sukjune Lee (robin00q@naver.com, Dept. of Computer Engineering, Myongji University)
+    * Main developer
+* Kangsan Jang (rkdtks1005@gmail.com, Dept. of Computer Engineering, Myongji University)
+    * Main developer (shell scripts & gawk)
+* Sungha Yoon (ysh5811@gmail.com, Dept. of Computer Engineering, Myongji University)
+    * Supporting developer (platform & testing & git repository)
+
+## Acknowledgements
+
+* This work is supported by Hyundai Motors, with following supporters
+
+  * Jeungil Kim (endland@ryundai.com, Global R&D Master, Hyundai Kia Namyang Technology Research Center)
