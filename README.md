@@ -252,3 +252,9 @@ $ sudo bash evcc.sh <interface name>
 * This work is supported by Hyundai Motors, with following supporters
 
   * Zeung Il Kim (endland AT hyundai DOT com, Global R&D Master, Hyundai Kia Namyang Technology Research Center)
+
+## References 
+
+* ISO 15118-2: International standard for EV-to-Charger communication (2014) [ISO website](https://www.iso.org/standard/55366.html)
+* ISO 15118-8: International standard for PHI/DL-layer requirements for wireless communication between EV and EV-Charger (2014) [ISO website](https://www.iso.org/standard/62984.html), [Preview](https://www.sis.se/api/document/preview/80001620/)
+* RiseV2G: Java-based EVCC/SECC open-source implementation. [Link](https://github.com/V2GClarity/RISE-V2G)
