@@ -4514,11 +4514,6 @@ int ieee802_11_mgmt(struct hostapd_data *hapd, const u8 *buf, size_t len,
 	if (hapd->iconf->track_sta_max_num)
 		sta_track_add(hapd->iface, mgmt->sa, ssi_signal);
 	
-	u8* hostapd_conf_vse;
-	u8 response_organzationID[5] = {0, };
-	u8 response_ett;
-	u8 request_ett;
-
 	switch (stype) {
 	case WLAN_FC_STYPE_AUTH:
 		wpa_printf(MSG_DEBUG, "mgmt::auth");
@@ -4526,37 +4521,35 @@ int ieee802_11_mgmt(struct hostapd_data *hapd, const u8 *buf, size_t len,
 		ret = 1;
 		break;
 	case WLAN_FC_STYPE_ASSOC_REQ:
-		;
-		/* ASLAB_MJU { */
-		/* Get hostap Vendor Specific Element */
-		hostapd_conf_vse = (u8 *)hapd->conf->assocresp_elements;
-		//response_organzationID[5] = {0, };
-		response_ett = 0;
+	/* ASLAB_MJU { */
+	/* Get hostap Vendor Specific Element */
+	{
+		u8* hostapd_conf_vse = (u8 *)hapd->conf->assocresp_elements;
+		u8 response_organzationID[5] = {0, };
+		u8 response_ett = 0;
+		int flag_vse = 0;
 		for(int i = 0 ; i < wpabuf_len(hapd->conf->assocresp_elements) ; i++){
 			if(hostapd_conf_vse[i] == 0xdd){ // Tag number: Vendor Specific
-				response_organzationID[0] = hostapd_conf_vse[2];
-				response_organzationID[1] = hostapd_conf_vse[3];
-				response_organzationID[2] = hostapd_conf_vse[4];
-				response_organzationID[3] = hostapd_conf_vse[5];
-				response_organzationID[4] = hostapd_conf_vse[6];
-				response_ett = hostapd_conf_vse[8];
+				response_organzationID[0] = hostapd_conf_vse[i+2];
+				response_organzationID[1] = hostapd_conf_vse[i+3];
+				response_organzationID[2] = hostapd_conf_vse[i+4];
+				response_organzationID[3] = hostapd_conf_vse[i+5];
+				response_organzationID[4] = hostapd_conf_vse[i+6];
+				response_ett = hostapd_conf_vse[i+8];
 			}
 		}
 
 		/* Get client Vendor Specific Element */
-		request_ett = 0;
+		u8 request_ett = 0;
 		for(int i = 0 ; i < len ; i++){
 			if(buf[i] == 0xdd){ // Tag number: Vendor Specific
-				if((buf[i+2] == response_organzationID[0]) && (buf[i+3] == response_organzationID[1]) && (buf[i+4] == response_organzationID[2])
-				&& (buf[i+5] == response_organzationID[3]) && (buf[i+6] == response_organzationID[4])){
+				if((buf[i+2] == response_organzationID[0]) && (buf[i+3] == response_organzationID[1]) && (buf[i+4] == response_organzationID[2]) && (buf[i+5] == response_organzationID[3]) && (buf[i+6] == response_organzationID[4])){
 
 					request_ett = buf[i+8];
 
 					/* check if hostap and client are compatible in ETT*/
-					if((response_ett & request_ett) == 0x00){
-						wpa_printf(MSG_INFO, "ETT of EV's VSE has no common service with AP's ETT");
-						return ret;
-						break;
+					if((response_ett & request_ett)){
+						flag_vse = 1;	
 					}
 
 				} else {
@@ -4564,43 +4557,48 @@ int ieee802_11_mgmt(struct hostapd_data *hapd, const u8 *buf, size_t len,
 				}
 			}
 		}
-		/* } ASLAB_MJU */
-		wpa_printf(MSG_DEBUG, "mgmt::assoc_req");
-		handle_assoc(hapd, mgmt, len, 0, ssi_signal);
-		ret = 1;
-		break;
+		if(flag_vse == 0){
+			wpa_printf(MSG_INFO, "ETT of EV's VSE has no common service with AP's ETT");
+			return ret;
+			break;
+		} else {
+			/* } ASLAB_MJU */
+			wpa_printf(MSG_DEBUG, "mgmt::assoc_req");
+			handle_assoc(hapd, mgmt, len, 0, ssi_signal);
+			ret = 1;
+			break;
+		}
+	}
 	case WLAN_FC_STYPE_REASSOC_REQ:
-		;
-		/* ASLAB_MJU { */
-		/* Get hostap Vendor Specific Element */
-		hostapd_conf_vse = (u8 *)hapd->conf->assocresp_elements;
-		//response_organzationID[5] = {0, };
-		response_ett = 0;
+	/* ASLAB_MJU { */
+	/* Get hostap Vendor Specific Element */
+	{
+		u8* hostapd_conf_vse = (u8 *)hapd->conf->assocresp_elements;
+		u8 response_organzationID[5] = {0, };
+		u8 response_ett = 0;
+		int flag_vse = 0;
 		for(int i = 0 ; i < wpabuf_len(hapd->conf->assocresp_elements) ; i++){
 			if(hostapd_conf_vse[i] == 0xdd){ // Tag number: Vendor Specific
-				response_organzationID[0] = hostapd_conf_vse[2];
-				response_organzationID[1] = hostapd_conf_vse[3];
-				response_organzationID[2] = hostapd_conf_vse[4];
-				response_organzationID[3] = hostapd_conf_vse[5];
-				response_organzationID[4] = hostapd_conf_vse[6];
-				response_ett = hostapd_conf_vse[8];
+				response_organzationID[0] = hostapd_conf_vse[i+2];
+				response_organzationID[1] = hostapd_conf_vse[i+3];
+				response_organzationID[2] = hostapd_conf_vse[i+4];
+				response_organzationID[3] = hostapd_conf_vse[i+5];
+				response_organzationID[4] = hostapd_conf_vse[i+6];
+				response_ett = hostapd_conf_vse[i+8];
 			}
 		}
-
+		
 		/* Get client Vendor Specific Element */
-		request_ett = 0;
+		u8 request_ett = 0;
 		for(int i = 0 ; i < len ; i++){
 			if(buf[i] == 0xdd){ // Tag number: Vendor Specific
-				if((buf[i+2] == response_organzationID[0]) && (buf[i+3] == response_organzationID[1]) && (buf[i+4] == response_organzationID[2])
-				&& (buf[i+5] == response_organzationID[3]) && (buf[i+6] == response_organzationID[4])){
+				if((buf[i+2] == response_organzationID[0]) && (buf[i+3] == response_organzationID[1]) && (buf[i+4] == response_organzationID[2]) && (buf[i+5] == response_organzationID[3]) && (buf[i+6] == response_organzationID[4])){
 
 					request_ett = buf[i+8];
 
 					/* check if hostap and client are compatible in ETT*/
-					if((response_ett & request_ett) == 0x00){
-						wpa_printf(MSG_INFO, "ETT of EV's VSE has no common service with AP's ETT");
-						return ret;
-						break;
+					if((response_ett & request_ett)){
+						flag_vse = 1;
 					}
 
 				} else {
@@ -4609,10 +4607,17 @@ int ieee802_11_mgmt(struct hostapd_data *hapd, const u8 *buf, size_t len,
 			}
 		}
 		/* } ASLAB_MJU */
-		wpa_printf(MSG_DEBUG, "mgmt::reassoc_req");
-		handle_assoc(hapd, mgmt, len, 1, ssi_signal);
-		ret = 1;
-		break;
+		if(!flag_vse){
+			wpa_printf(MSG_INFO, "ETT of EV's VSE has no common service with AP's ETT");
+			return ret;
+			break;
+		}else{
+			wpa_printf(MSG_DEBUG, "mgmt::reassoc_req");
+			handle_assoc(hapd, mgmt, len, 1, ssi_signal);
+			ret = 1;
+			break;
+		}
+	}
 	case WLAN_FC_STYPE_DISASSOC:
 		wpa_printf(MSG_DEBUG, "mgmt::disassoc");
 		handle_disassoc(hapd, mgmt, len);
