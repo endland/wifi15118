@@ -1,6 +1,6 @@
-diff -Naur -x '*.swp' hostapd-2.8/src/ap/ieee802_11.c hostapd-2.8-modified/src/ap/ieee802_11.c
+diff -Naur -x '*.swp' hostapd-2.8/src/ap/ieee802_11.c hostapd-2.8-vse15118/src/ap/ieee802_11.c
 --- hostapd-2.8/src/ap/ieee802_11.c	2019-10-23 04:32:28.000000000 +0900
-+++ hostapd-2.8-modified/src/ap/ieee802_11.c	2019-10-23 04:52:55.000000000 +0900
++++ hostapd-2.8-vse15118/src/ap/ieee802_11.c	2019-10-23 04:52:55.000000000 +0900
 @@ -3576,6 +3576,19 @@
  	}
  #endif /* CONFIG_FILS */

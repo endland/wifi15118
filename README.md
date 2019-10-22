@@ -87,7 +87,7 @@ $ git clone https://github.com/appseclab/wifi15118
 ~~~
 * (case 1) Use the modified version of hostapd v2.8
 ~~~
-$ cd secc/hostapd-2.8-modified/hostapd/
+$ cd secc/hostapd-2.8-vse15118/hostapd/
 
 $ cp defconfig ./config
 
@@ -224,8 +224,8 @@ $ sudo bash evcc.sh <interface name>
 
 	secc5.sh : Setup a 15118-compliant 2.4GHz AP with VSE values in Beacon using hostap, and run SECC (e.g., riseV2G secc)
 
-	hostapd.patch : Patch file from hostapd-2.8 to hostapd-2.8-modified.
+	hostapd.patch : Patch file from hostapd-2.8 to hostapd-2.8-vse15118.
 
-	hostapd-2.8-modified/: modified version of hostpad that accepts EVCCs only with compatible VSE values
+	hostapd-2.8-vse15118/: modified version of hostpad that accepts EVCCs only with compatible VSE values
 	
 	risev2g-secc/ : RiseV2G SECC implementation
