@@ -251,4 +251,4 @@ $ sudo bash evcc.sh <interface name>
 
 * This work is supported by Hyundai Motors, with following supporters
 
-  * Jeungil Kim (endland AT hyundai DOT com, Global R&D Master, Hyundai Kia Namyang Technology Research Center)
+  * Zeung Il Kim (endland AT hyundai DOT com, Global R&D Master, Hyundai Kia Namyang Technology Research Center)
