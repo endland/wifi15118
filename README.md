@@ -236,7 +236,7 @@ $ sudo bash evcc.sh <interface name>
 
 ## Credit
 
-* Minho Shin (shinminho AT gmail DOT com)
+* Minho Shin (shinminho AT gmail DOT com, [homepage](http://hmcl.mju.ac.kr))
     * Project director, Supporting developer
 * Sukjune Lee (robin00q at naver DOT com)
     * Main developer
