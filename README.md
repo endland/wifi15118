@@ -28,6 +28,10 @@ EVCC and SECC provided in this project can do the followings:
 - EVCC can perform active scanning (Probe Request) and determine to which AP to associate based on the VSE-compatibility
 - EVCC can associate to the SECC with compatible VSEs and the strongest signal strength, if any
 
+### TODOs 
+- Reassociation tests are to be done
+- Simultaneous dual band support of SECC needs to be tested using dual-mode interface
+
 ## Specifications
 
 This project was tested using the following hardware/software with indicated versions. Other versions may work but not tested.
@@ -232,13 +236,13 @@ $ sudo bash evcc.sh <interface name>
 
 ## Credit
 
-* Minho Shin (shinminho@gmail.com, Dept. of Computer Engineering, Myongji University)
+* Minho Shin (shinminho@gmail.com, Dept. of Computer Engineering, Myongji University, Korea)
     * Project director, Supporting developer
-* Sukjune Lee (robin00q@naver.com, Dept. of Computer Engineering, Myongji University)
+* Sukjune Lee (robin00q@naver.com, Dept. of Computer Engineering, Myongji University, Korea)
     * Main developer
-* Kangsan Jang (rkdtks1005@gmail.com, Dept. of Computer Engineering, Myongji University)
+* Kangsan Jang (rkdtks1005@gmail.com, Dept. of Computer Engineering, Myongji University, Korea)
     * Main developer (shell scripts & gawk)
-* Sungha Yoon (ysh5811@gmail.com, Dept. of Computer Engineering, Myongji University)
+* Sungha Yoon (ysh5811@gmail.com, Dept. of Computer Engineering, Myongji University, Korea)
     * Supporting developer (platform & testing & git repository)
 
 ## Acknowledgements
