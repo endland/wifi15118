@@ -72,7 +72,7 @@ $ sudo apt-get update && sudo apt-get upgrade (just in case)
 
 **Install dependencies**
 ~~~
-$ sudo apt-get install net-tools make pkg-config libnl-3-dev libssl-dev libnl-genl-3-dev gawk
+$ sudo apt-get install net-tools make pkg-config libnl-3-dev libssl-dev libnl-genl-3-dev gawk dnsmasq
 ~~~
 
 **Install extra tools**
