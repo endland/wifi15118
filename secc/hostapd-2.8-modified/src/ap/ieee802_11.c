@@ -3536,7 +3536,8 @@ static u16 send_assoc_resp(struct hostapd_data *hapd, struct sta_info *sta,
 
 	p = hostapd_eid_mbo(hapd, p, buf + buflen - p);
 
-	if (hapd->conf->assocresp_elements && (size_t) (buf + buflen - p) >=
+	if (hapd->conf->assocresp_elements &&
+	    (size_t) (buf + buflen - p) >=
 	    wpabuf_len(hapd->conf->assocresp_elements)) {
 		os_memcpy(p, wpabuf_head(hapd->conf->assocresp_elements),
 			  wpabuf_len(hapd->conf->assocresp_elements));
@@ -3575,7 +3576,7 @@ static u16 send_assoc_resp(struct hostapd_data *hapd, struct sta_info *sta,
 	}
 #endif /* CONFIG_FILS */
 
-/* ASLAB_MJU { */
+/* ASLAB_MJU [ */
 	/* show source, dest mac address etc.. */
 	u16 f_control = le_to_host16(reply->frame_control);
 	u16 dur = le_to_host16(reply->duration);
@@ -3586,7 +3587,7 @@ static u16 send_assoc_resp(struct hostapd_data *hapd, struct sta_info *sta,
 	wpa_printf(MSG_INFO, "Destination(hostap) MAC Address: " MACSTR, MAC2STR(reply->da));
 	wpa_printf(MSG_INFO, "bssid: " MACSTR, MAC2STR(reply->bssid));
 	wpa_printf(MSG_INFO, "seq_ctrl: 0x%04x", s_ctrl);
-/* } ASLAB_MJU */
+/* ] ASLAB_MJU */
 
 	if (hostapd_drv_send_mlme(hapd, reply, send_len, 0) < 0) {
 		wpa_printf(MSG_INFO, "Failed to send assoc resp: %s",
@@ -4513,7 +4514,7 @@ int ieee802_11_mgmt(struct hostapd_data *hapd, const u8 *buf, size_t len,
 
 	if (hapd->iconf->track_sta_max_num)
 		sta_track_add(hapd->iface, mgmt->sa, ssi_signal);
-	
+
 	switch (stype) {
 	case WLAN_FC_STYPE_AUTH:
 		wpa_printf(MSG_DEBUG, "mgmt::auth");
@@ -4521,9 +4522,9 @@ int ieee802_11_mgmt(struct hostapd_data *hapd, const u8 *buf, size_t len,
 		ret = 1;
 		break;
 	case WLAN_FC_STYPE_ASSOC_REQ:
-	/* ASLAB_MJU { */
-	/* Get hostap Vendor Specific Element */
+	/* ASLAB_MJU: Reject association request if no VSE or ETT doesn't match [ */
 	{
+		/* Get hostap Vendor Specific Element */
 		u8* hostapd_conf_vse = (u8 *)hapd->conf->assocresp_elements;
 		u8 response_organzationID[5] = {0, };
 		u8 response_ett = 0;
@@ -4543,7 +4544,12 @@ int ieee802_11_mgmt(struct hostapd_data *hapd, const u8 *buf, size_t len,
 		u8 request_ett = 0;
 		for(int i = 0 ; i < len ; i++){
 			if(buf[i] == 0xdd){ // Tag number: Vendor Specific
-				if((buf[i+2] == response_organzationID[0]) && (buf[i+3] == response_organzationID[1]) && (buf[i+4] == response_organzationID[2]) && (buf[i+5] == response_organzationID[3]) && (buf[i+6] == response_organzationID[4])){
+				if((buf[i+2] == response_organzationID[0]) 
+					&& (buf[i+3] == response_organzationID[1]) 
+					&& (buf[i+4] == response_organzationID[2]) 
+					&& (buf[i+5] == response_organzationID[3]) 
+					&& (buf[i+6] == response_organzationID[4]))
+				{
 
 					request_ett = buf[i+8];
 
@@ -4557,22 +4563,26 @@ int ieee802_11_mgmt(struct hostapd_data *hapd, const u8 *buf, size_t len,
 				}
 			}
 		}
+		/* Check if no VSE was found */
 		if(flag_vse == 0){
 			wpa_printf(MSG_INFO, "ETT of EV's VSE has no common service with AP's ETT");
 			return ret;
 			break;
-		} else {
-			/* } ASLAB_MJU */
+		} 
+		/* Reassociation success */
+		else {
 			wpa_printf(MSG_DEBUG, "mgmt::assoc_req");
 			handle_assoc(hapd, mgmt, len, 0, ssi_signal);
 			ret = 1;
 			break;
 		}
 	}
+	/* ] ASLAB_MJU */
+
 	case WLAN_FC_STYPE_REASSOC_REQ:
-	/* ASLAB_MJU { */
-	/* Get hostap Vendor Specific Element */
+	/* ASLAB_MJU: Reject reassociation request if no VSE or ETT doesn't match [ */
 	{
+		/* Get hostap Vendor Specific Element */
 		u8* hostapd_conf_vse = (u8 *)hapd->conf->assocresp_elements;
 		u8 response_organzationID[5] = {0, };
 		u8 response_ett = 0;
@@ -4592,7 +4602,12 @@ int ieee802_11_mgmt(struct hostapd_data *hapd, const u8 *buf, size_t len,
 		u8 request_ett = 0;
 		for(int i = 0 ; i < len ; i++){
 			if(buf[i] == 0xdd){ // Tag number: Vendor Specific
-				if((buf[i+2] == response_organzationID[0]) && (buf[i+3] == response_organzationID[1]) && (buf[i+4] == response_organzationID[2]) && (buf[i+5] == response_organzationID[3]) && (buf[i+6] == response_organzationID[4])){
+				if((buf[i+2] == response_organzationID[0]) 
+					&& (buf[i+3] == response_organzationID[1]) 
+					&& (buf[i+4] == response_organzationID[2]) 
+					&& (buf[i+5] == response_organzationID[3]) 
+					&& (buf[i+6] == response_organzationID[4]))
+				{
 
 					request_ett = buf[i+8];
 
@@ -4606,18 +4621,21 @@ int ieee802_11_mgmt(struct hostapd_data *hapd, const u8 *buf, size_t len,
 				}
 			}
 		}
-		/* } ASLAB_MJU */
+		/* check if no VSE was found */
 		if(!flag_vse){
 			wpa_printf(MSG_INFO, "ETT of EV's VSE has no common service with AP's ETT");
 			return ret;
 			break;
-		}else{
+		}
+		/* Reassociation success */
+		else{
 			wpa_printf(MSG_DEBUG, "mgmt::reassoc_req");
 			handle_assoc(hapd, mgmt, len, 1, ssi_signal);
 			ret = 1;
 			break;
 		}
 	}
+	/* ] ASLAB_MJU */
 	case WLAN_FC_STYPE_DISASSOC:
 		wpa_printf(MSG_DEBUG, "mgmt::disassoc");
 		handle_disassoc(hapd, mgmt, len);
