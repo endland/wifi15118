@@ -236,17 +236,19 @@ $ sudo bash evcc.sh <interface name>
 
 ## Credit
 
-* Minho Shin (shinminho@gmail.com, Dept. of Computer Engineering, Myongji University, Korea)
+* Minho Shin (shinminho AT gmail DOT com)
     * Project director, Supporting developer
-* Sukjune Lee (robin00q@naver.com, Dept. of Computer Engineering, Myongji University, Korea)
+* Sukjune Lee (robin00q at naver DOT com)
     * Main developer
-* Kangsan Jang (rkdtks1005@gmail.com, Dept. of Computer Engineering, Myongji University, Korea)
+* Kangsan Jang (rkdtks1005 AT gmail DOT com)
     * Main developer (shell scripts & gawk)
-* Sungha Yoon (ysh5811@gmail.com, Dept. of Computer Engineering, Myongji University, Korea)
+* Sungha Yoon (ysh5811 AT gmail DOT com)
     * Supporting developer (platform & testing & git repository)
+
+* All affiliated with Applied Security Laboratory (ASLab), Dept. of Computer Engineering, Myongji University, Korea
 
 ## Acknowledgements
 
 * This work is supported by Hyundai Motors, with following supporters
 
-  * Jeungil Kim (endland@ryundai.com, Global R&D Master, Hyundai Kia Namyang Technology Research Center)
+  * Jeungil Kim (endland AT hyundai DOT com, Global R&D Master, Hyundai Kia Namyang Technology Research Center)
